@@ -20,12 +20,20 @@
 
 #define NON_ALPHANUM_REPLACEMENT    '_'
 
+#define RESOURCE_TYPE_BINARY_PREFIX "-b"
+#define RESOURCE_TYPE_TEXT_PREFIX   "-t"
+
+#define RESOURCE_TYPE_UNKNOWN       0
+#define RESOURCE_TYPE_BINARY        1
+#define RESOURCE_TYPE_TEXT          2
+
 void usage()
 {
-    fprintf(
-        stderr,
-        "Usage: resourceGenerator {outputFile} {resource1} [{resource2}] ... [{resourceN}]\n"
-    );
+    fprintf(stderr, "Usage: resourceGenerator -type<resource> [-type<resource>...]\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "Available types:\n");
+    fprintf(stderr, "  -b<resource>   A binary file.\n");
+    fprintf(stderr, "  -t<resource>   A text file.\n");
 }
 
 FILE* openFile(const char *name, const char *mode)
@@ -38,22 +46,50 @@ FILE* openFile(const char *name, const char *mode)
     return file;
 }
 
-FILE* prepareOutputFile(const char *name)
+FILE* prepareOutputFile(const char *resourceName)
 {
-    return openFile(name, "w");
+    return openFile(resourceName, "w");
 }
 
-FILE* prepareResourceFile(const char *name)
+FILE* prepareResourceFile(const char *resourceName)
 {
-    return openFile(name, "r");
+    return openFile(resourceName, "r");
+}
+
+int isResourceOfType(const char *resourceName, const char *resourceTypePrefix)
+{
+    return strstr(resourceName, resourceTypePrefix) == resourceName;
+}
+
+int getResourceNameFromArgument(char **resourceName)
+{
+    if (isResourceOfType(*resourceName, RESOURCE_TYPE_BINARY_PREFIX))
+    {
+        *resourceName += strlen(RESOURCE_TYPE_BINARY_PREFIX);
+        return RESOURCE_TYPE_BINARY;
+    }
+
+    if (isResourceOfType(*resourceName, RESOURCE_TYPE_TEXT_PREFIX))
+    {
+        *resourceName += strlen(RESOURCE_TYPE_TEXT_PREFIX);
+        return RESOURCE_TYPE_TEXT;
+    }
+
+    return RESOURCE_TYPE_UNKNOWN;
 }
 
 int appendResource(FILE *outputFile, char *resourceName)
 {
+    int resourceType = getResourceNameFromArgument(&resourceName);
+    if (RESOURCE_TYPE_UNKNOWN == resourceType)
+    {
+        fprintf(stderr, "Invalid resource type prefix provided: %s", resourceName);
+        return -1;
+    }
+
     FILE *resourceFile = prepareResourceFile(resourceName);
     if (NULL == resourceFile)
     {
-        fclose(outputFile);
         return -1;
     }
 
@@ -115,7 +151,13 @@ int appendResource(FILE *outputFile, char *resourceName)
     }
     while (nRead > 0);
 
-    fprintf(outputFile, "};\n");
+    if (RESOURCE_TYPE_TEXT == resourceType)
+    {
+        // A text resource must always be terminated by the NULL character.
+        fprintf(outputFile, "0x00");
+    }
+
+    fprintf(outputFile, "\n};\n");
     fprintf(
         outputFile,
         "const size_t %s_size = sizeof(%s);\n",
