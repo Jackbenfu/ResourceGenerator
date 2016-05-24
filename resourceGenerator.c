@@ -123,7 +123,7 @@ int appendResource(FILE *outputFile, char *resourceName)
     fprintf(outputFile, "\n");
     fprintf(
         outputFile,
-        "const unsigned char %s[] = {\n",
+        "const unsigned char %s[] =\n{\n",
         resourceVariableName
     );
 
