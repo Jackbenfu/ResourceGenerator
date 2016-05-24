@@ -154,16 +154,27 @@ int appendResource(FILE *outputFile, char *resourceName)
     if (RESOURCE_TYPE_TEXT == resourceType)
     {
         // A text resource must always be terminated by the NULL character.
-        fprintf(outputFile, "0x00");
+        if (0 == lineCount)
+        {
+            fprintf(outputFile, "    0x00");
+        }
+        else
+        {
+            fprintf(outputFile, "0x00");
+        }
     }
 
     fprintf(outputFile, "\n};\n");
-    fprintf(
-        outputFile,
-        "const size_t %s_size = sizeof(%s);\n",
-        resourceVariableName,
-        resourceVariableName
-    );
+
+    if (RESOURCE_TYPE_TEXT != resourceType)
+    {
+        fprintf(
+            outputFile,
+            "const size_t %s_size = sizeof(%s);\n",
+            resourceVariableName,
+            resourceVariableName
+        );
+    }
 
     fclose(resourceFile);
 
