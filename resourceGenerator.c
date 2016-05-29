@@ -29,7 +29,7 @@
 
 void usage()
 {
-    fprintf(stderr, "Usage: resourceGenerator -type<resource> [-type<resource>...]\n");
+    fprintf(stderr, "Usage: resourceGenerator outputFile -type<resource> [-type<resource>...]\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "Available types:\n");
     fprintf(stderr, "  -b<resource>   A binary file.\n");
