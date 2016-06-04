@@ -93,8 +93,8 @@ int appendResource(FILE *outputFile, char *resourceName)
         return -1;
     }
 
-    size_t resourceNameLength = (int)strlen(resourceName);
-    size_t resourceNameIndex = resourceNameLength - 1;
+    int resourceNameLength = (int)strlen(resourceName);
+    int resourceNameIndex = resourceNameLength - 1;
     while (resourceNameIndex > -1)
     {
         if (resourceName[resourceNameIndex] == '/' ||
