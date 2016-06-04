@@ -1,5 +1,5 @@
 //
-//  resourceGenerator.c
+//  resourceGenerator.cpp
 //  Resource generator
 //
 //  Created by Damien Bendejacq on 21/05/16.
@@ -48,12 +48,12 @@ FILE* openFile(const char *name, const char *mode)
 
 FILE* prepareOutputFile(const char *resourceName)
 {
-    return openFile(resourceName, "w");
+    return openFile(resourceName, "wb");
 }
 
 FILE* prepareResourceFile(const char *resourceName)
 {
-    return openFile(resourceName, "r");
+    return openFile(resourceName, "rb");
 }
 
 int isResourceOfType(const char *resourceName, const char *resourceTypePrefix)
@@ -93,8 +93,8 @@ int appendResource(FILE *outputFile, char *resourceName)
         return -1;
     }
 
-    int resourceNameLength = (int)strlen(resourceName);
-    int resourceNameIndex = resourceNameLength - 1;
+    size_t resourceNameLength = (int)strlen(resourceName);
+    size_t resourceNameIndex = resourceNameLength - 1;
     while (resourceNameIndex > -1)
     {
         if (resourceName[resourceNameIndex] == '/' ||
