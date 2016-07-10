@@ -123,7 +123,7 @@ int appendResource(FILE *outputFile, char *resourceName)
     fprintf(outputFile, "\n");
     fprintf(
         outputFile,
-        "const unsigned char %s[] =\n{\n",
+        "extern \"C\" const unsigned char %s[] =\n{\n",
         resourceVariableName
     );
 
@@ -170,7 +170,7 @@ int appendResource(FILE *outputFile, char *resourceName)
     {
         fprintf(
             outputFile,
-            "const size_t %s_size = sizeof(%s);\n",
+            "extern \"C\" const size_t %s_size = sizeof(%s);\n",
             resourceVariableName,
             resourceVariableName
         );
