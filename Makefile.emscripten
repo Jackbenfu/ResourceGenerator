@@ -1,0 +1,10 @@
+CC                  = c++
+
+CFLAGS              = -Wall -std=c++11
+
+SOURCES             =	resourceGenerator.cpp
+
+OUT                 = resourceGenerator
+
+all:
+	$(CC) $(CFLAGS) $(SOURCES) -o $(OUT)
