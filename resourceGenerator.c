@@ -1,10 +1,10 @@
-//
-//  resourceGenerator.cpp
-//  Resource generator
-//
-//  Created by Damien Bendejacq on 21/05/16.
-//  Copyright (c) 2016 Damien Bendejacq. All rights reserved.
-//
+/*
+ *  resourceGenerator.c
+ *  Resource generator
+ *
+ *  Created by Damien Bendejacq on 21/05/16.
+ *  Copyright © 2016 Damien Bendejacq. All rights reserved.
+*/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -153,7 +153,7 @@ int appendResource(FILE *outputFile, char *resourceName)
 
     if (RESOURCE_TYPE_TEXT == resourceType)
     {
-        // A text resource must always be terminated by the NULL character.
+        /* A text resource must always be terminated by the NULL character. */
         if (0 == lineCount)
         {
             fprintf(outputFile, "    0x00");
